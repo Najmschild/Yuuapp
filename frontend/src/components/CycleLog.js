@@ -80,7 +80,7 @@ const CycleLog = () => {
       switch (tab) {
         case 'period':
           if (!formData.period.startDate) {
-            toast.error('Please select a start date');
+            toast.error(t('selectStartDate'));
             return;
           }
           const cycleLength = formData.period.endDate 
@@ -96,12 +96,12 @@ const CycleLog = () => {
             ...prev,
             period: { startDate: '', endDate: '', flow: 'medium' }
           }));
-          toast.success('Period logged successfully!');
+          toast.success(t('periodLoggedSuccess'));
           break;
           
         case 'symptoms':
           if (formData.symptoms.symptoms.length === 0) {
-            toast.error('Please select at least one symptom');
+            toast.error(t('selectSymptom'));
             return;
           }
           
@@ -110,12 +110,12 @@ const CycleLog = () => {
             ...prev,
             symptoms: { date: new Date().toISOString().split('T')[0], symptoms: [], intensity: 'mild' }
           }));
-          toast.success('Symptoms logged successfully!');
+          toast.success(t('symptomsLoggedSuccess'));
           break;
           
         case 'notes':
           if (!formData.notes.content.trim()) {
-            toast.error('Please add a note');
+            toast.error(t('addNote'));
             return;
           }
           
@@ -124,7 +124,7 @@ const CycleLog = () => {
             ...prev,
             notes: { date: new Date().toISOString().split('T')[0], content: '' }
           }));
-          toast.success('Note saved successfully!');
+          toast.success(t('noteSavedSuccess'));
           break;
       }
     } catch (error) {
