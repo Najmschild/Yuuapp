@@ -35,6 +35,68 @@ class StatusCheck(BaseModel):
 class StatusCheckCreate(BaseModel):
     client_name: str
 
+# Cycle Tracking Models
+class Cycle(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    startDate: str
+    endDate: Optional[str] = None
+    flow: str = "medium"  # light, medium, heavy
+    length: int = 28
+    createdAt: datetime = Field(default_factory=datetime.utcnow)
+
+class CycleCreate(BaseModel):
+    startDate: str
+    endDate: Optional[str] = None
+    flow: str = "medium"
+    length: Optional[int] = 28
+
+class CycleUpdate(BaseModel):
+    startDate: Optional[str] = None
+    endDate: Optional[str] = None
+    flow: Optional[str] = None
+    length: Optional[int] = None
+
+# Symptom Tracking Models
+class Symptom(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    date: str
+    symptoms: List[str] = []
+    intensity: str = "mild"  # mild, moderate, severe
+    createdAt: datetime = Field(default_factory=datetime.utcnow)
+
+class SymptomCreate(BaseModel):
+    date: str
+    symptoms: List[str] = []
+    intensity: str = "mild"
+
+# Notes Models
+class Note(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    date: str
+    content: str
+    createdAt: datetime = Field(default_factory=datetime.utcnow)
+
+class NoteCreate(BaseModel):
+    date: str
+    content: str
+
+# User Preferences Models
+class UserPreferences(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    theme: str = "neutral"
+    notifications: dict = {
+        "periodReminders": True,
+        "ovulationReminders": True,
+        "fertileWindow": False,
+        "dailyCheck": False
+    }
+    createdAt: datetime = Field(default_factory=datetime.utcnow)
+    updatedAt: datetime = Field(default_factory=datetime.utcnow)
+
+class UserPreferencesUpdate(BaseModel):
+    theme: Optional[str] = None
+    notifications: Optional[dict] = None
+
 # Add your routes to the router instead of directly to app
 @api_router.get("/")
 async def root():
