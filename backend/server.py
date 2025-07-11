@@ -90,6 +90,7 @@ class NoteCreate(BaseModel):
 class UserPreferences(BaseModel):
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
     theme: str = "neutral"
+    language: str = "en"
     notifications: dict = {
         "periodReminders": True,
         "ovulationReminders": True,
@@ -101,6 +102,7 @@ class UserPreferences(BaseModel):
 
 class UserPreferencesUpdate(BaseModel):
     theme: Optional[str] = None
+    language: Optional[str] = None
     notifications: Optional[dict] = None
 
 # Add your routes to the router instead of directly to app
