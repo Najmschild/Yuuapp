@@ -2,12 +2,15 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { ThemeProvider } from './contexts/ThemeContext';
 import { CycleProvider } from './contexts/CycleContext';
+import { LanguageProvider } from './contexts/LanguageContext';
 import { useCycle } from './contexts/CycleContext';
+import { useLanguage } from './contexts/LanguageContext';
 import Navigation from './components/Navigation';
 import CalendarView from './components/CalendarView';
 import CycleLog from './components/CycleLog';
 import Insights from './components/Insights';
 import Settings from './components/Settings';
+import QuickActions from './components/QuickActions';
 import { Toaster } from './components/ui/sonner';
 import './App.css';
 
@@ -19,8 +22,9 @@ const LoadingSpinner = () => (
 
 const AppContent = () => {
   const { loading, error } = useCycle();
+  const { loading: langLoading } = useLanguage();
 
-  if (loading) {
+  if (loading || langLoading) {
     return <LoadingSpinner />;
   }
 
@@ -53,6 +57,7 @@ const AppContent = () => {
           </Routes>
         </div>
         <Navigation />
+        <QuickActions />
         <Toaster />
       </Router>
     </div>
@@ -62,9 +67,11 @@ const AppContent = () => {
 function App() {
   return (
     <ThemeProvider>
-      <CycleProvider>
-        <AppContent />
-      </CycleProvider>
+      <LanguageProvider>
+        <CycleProvider>
+          <AppContent />
+        </CycleProvider>
+      </LanguageProvider>
     </ThemeProvider>
   );
 }
