@@ -138,10 +138,10 @@ const CycleLog = () => {
       {/* Header */}
       <div className="mb-6">
         <h1 className="text-3xl font-bold" style={{ color: colors.text }}>
-          Log Your Cycle
+          {t('logYourCycle')}
         </h1>
         <p className="text-sm mt-1" style={{ color: colors.textSecondary }}>
-          Record your period, symptoms, and daily notes
+          {t('recordPeriod')}
         </p>
       </div>
 
