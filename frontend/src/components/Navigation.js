@@ -2,17 +2,19 @@ import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Calendar, PlusCircle, BarChart3, Settings } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
+import { useLanguage } from '../contexts/LanguageContext';
 
 const Navigation = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { colors } = useTheme();
+  const { t } = useLanguage();
 
   const navItems = [
-    { path: '/', icon: Calendar, label: 'Calendar' },
-    { path: '/log', icon: PlusCircle, label: 'Log' },
-    { path: '/insights', icon: BarChart3, label: 'Insights' },
-    { path: '/settings', icon: Settings, label: 'Settings' }
+    { path: '/', icon: Calendar, label: t('calendar') },
+    { path: '/log', icon: PlusCircle, label: t('log') },
+    { path: '/insights', icon: BarChart3, label: t('insights') },
+    { path: '/settings', icon: Settings, label: t('settings') }
   ];
 
   return (
