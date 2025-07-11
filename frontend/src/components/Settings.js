@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Palette, Bell, Shield, Download, Trash2, Moon, Sun, Smartphone } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
 import { useCycle } from '../contexts/CycleContext';
@@ -11,7 +11,7 @@ import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, 
 import { toast } from 'sonner';
 
 const Settings = () => {
-  const { currentTheme, themes, switchTheme, colors } = useTheme();
+  const { currentTheme, themes, switchTheme, colors, preferences, updateNotificationPreferences } = useTheme();
   const { cycles, symptoms, notes } = useCycle();
   const [notifications, setNotifications] = useState({
     periodReminders: true,
@@ -20,12 +20,29 @@ const Settings = () => {
     dailyCheck: false
   });
 
-  const handleNotificationToggle = (type) => {
-    setNotifications(prev => ({
-      ...prev,
-      [type]: !prev[type]
-    }));
-    toast.success('Notification settings updated');
+  // Load notification preferences from backend
+  useEffect(() => {
+    if (preferences && preferences.notifications) {
+      setNotifications(preferences.notifications);
+    }
+  }, [preferences]);
+
+  const handleNotificationToggle = async (type) => {
+    const newNotifications = {
+      ...notifications,
+      [type]: !notifications[type]
+    };
+    
+    setNotifications(newNotifications);
+    
+    try {
+      await updateNotificationPreferences(newNotifications);
+      toast.success('Notification settings updated');
+    } catch (error) {
+      // Revert on error
+      setNotifications(notifications);
+      toast.error('Failed to update notification settings');
+    }
   };
 
   const exportData = () => {
@@ -33,6 +50,7 @@ const Settings = () => {
       cycles,
       symptoms,
       notes,
+      preferences,
       exportDate: new Date().toISOString(),
       appVersion: '1.0.0'
     };
@@ -54,7 +72,8 @@ const Settings = () => {
     localStorage.removeItem('cycleTracker_cycles');
     localStorage.removeItem('cycleTracker_symptoms');
     localStorage.removeItem('cycleTracker_notes');
-    toast.success('All data cleared. Please refresh the page.');
+    localStorage.removeItem('cycleTracker_theme');
+    toast.success('All local data cleared. Please refresh the page.');
   };
 
   return (
