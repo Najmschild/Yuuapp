@@ -2,13 +2,16 @@ import React, { useState, useMemo } from 'react';
 import { ChevronLeft, ChevronRight, Plus, Heart, Droplets } from 'lucide-react';
 import { useCycle } from '../contexts/CycleContext';
 import { useTheme } from '../contexts/ThemeContext';
+import { useLanguage } from '../contexts/LanguageContext';
 import { Button } from './ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 import { Badge } from './ui/badge';
+import TodayWidget from './TodayWidget';
 
 const CalendarView = () => {
   const { cycles, symptoms, notes, getPredictions } = useCycle();
   const { colors } = useTheme();
+  const { t } = useLanguage();
   const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState(null);
 
