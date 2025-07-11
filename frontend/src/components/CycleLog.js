@@ -85,7 +85,7 @@ const CycleLog = () => {
             ? Math.ceil((new Date(formData.period.endDate) - new Date(formData.period.startDate)) / (1000 * 60 * 60 * 24)) + 1
             : 28;
           
-          addCycle({
+          await addCycle({
             ...formData.period,
             length: cycleLength
           });
@@ -103,7 +103,7 @@ const CycleLog = () => {
             return;
           }
           
-          addSymptom(formData.symptoms);
+          await addSymptom(formData.symptoms);
           setFormData(prev => ({
             ...prev,
             symptoms: { date: new Date().toISOString().split('T')[0], symptoms: [], intensity: 'mild' }
@@ -117,7 +117,7 @@ const CycleLog = () => {
             return;
           }
           
-          addNote(formData.notes);
+          await addNote(formData.notes);
           setFormData(prev => ({
             ...prev,
             notes: { date: new Date().toISOString().split('T')[0], content: '' }
@@ -126,7 +126,8 @@ const CycleLog = () => {
           break;
       }
     } catch (error) {
-      toast.error('Something went wrong. Please try again.');
+      console.error('Submit error:', error);
+      toast.error(error.message || 'Something went wrong. Please try again.');
     }
   };
 
