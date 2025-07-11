@@ -306,7 +306,7 @@ const CalendarView = () => {
                 }}
               />
               <span className="text-sm" style={{ color: colors.textSecondary }}>
-                Period
+                {t('period')}
               </span>
             </div>
             <div className="flex items-center gap-2">
@@ -318,7 +318,7 @@ const CalendarView = () => {
                 }}
               />
               <span className="text-sm" style={{ color: colors.textSecondary }}>
-                Fertile
+                {t('fertile')}
               </span>
             </div>
             <div className="flex items-center gap-2">
@@ -330,7 +330,7 @@ const CalendarView = () => {
                 }}
               />
               <span className="text-sm" style={{ color: colors.textSecondary }}>
-                Ovulation
+                {t('ovulation')}
               </span>
             </div>
             <div className="flex items-center gap-2">
@@ -342,7 +342,7 @@ const CalendarView = () => {
                 }}
               />
               <span className="text-sm" style={{ color: colors.textSecondary }}>
-                Predicted
+                {t('predicted')}
               </span>
             </div>
           </div>
