@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Calendar, Plus, Droplets, Heart, MessageSquare, Save } from 'lucide-react';
 import { useCycle } from '../contexts/CycleContext';
 import { useTheme } from '../contexts/ThemeContext';
+import { useLanguage } from '../contexts/LanguageContext';
 import { Button } from './ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 import { Input } from './ui/input';
@@ -15,6 +16,7 @@ import { toast } from 'sonner';
 const CycleLog = () => {
   const { addCycle, addSymptom, addNote } = useCycle();
   const { colors } = useTheme();
+  const { t } = useLanguage();
   const [activeTab, setActiveTab] = useState('period');
   const [formData, setFormData] = useState({
     period: {
@@ -34,22 +36,22 @@ const CycleLog = () => {
   });
 
   const symptomOptions = [
-    { id: 'cramps', label: 'Cramps' },
-    { id: 'headache', label: 'Headache' },
-    { id: 'bloating', label: 'Bloating' },
-    { id: 'mood_swings', label: 'Mood Swings' },
-    { id: 'fatigue', label: 'Fatigue' },
-    { id: 'tender_breasts', label: 'Tender Breasts' },
-    { id: 'acne', label: 'Acne' },
-    { id: 'cravings', label: 'Cravings' },
-    { id: 'back_pain', label: 'Back Pain' },
-    { id: 'nausea', label: 'Nausea' }
+    { id: 'cramps', label: t('cramps') },
+    { id: 'headache', label: t('headache') },
+    { id: 'bloating', label: t('bloating') },
+    { id: 'mood_swings', label: t('mood_swings') },
+    { id: 'fatigue', label: t('fatigue') },
+    { id: 'tender_breasts', label: t('tender_breasts') },
+    { id: 'acne', label: t('acne') },
+    { id: 'cravings', label: t('cravings') },
+    { id: 'back_pain', label: t('back_pain') },
+    { id: 'nausea', label: t('nausea') }
   ];
 
   const tabs = [
-    { id: 'period', label: 'Period', icon: Droplets },
-    { id: 'symptoms', label: 'Symptoms', icon: Heart },
-    { id: 'notes', label: 'Notes', icon: MessageSquare }
+    { id: 'period', label: t('logPeriod'), icon: Droplets },
+    { id: 'symptoms', label: t('logSymptoms'), icon: Heart },
+    { id: 'notes', label: t('dailyNotes'), icon: MessageSquare }
   ];
 
   const handleInputChange = (tab, field, value) => {
