@@ -261,11 +261,10 @@ metadata:
 
 test_plan:
   current_focus:
-    - "Cycles CRUD API Endpoints"
-    - "Symptoms CRUD API Endpoints"
-    - "Notes CRUD API Endpoints"
-    - "User Preferences API Endpoints"
     - "Data Context Integration"
+    - "Cycle Logging Component"
+    - "Settings Component"
+    - "Theme System"
   stuck_tasks: []
   test_all: false
   test_priority: "high_first"
