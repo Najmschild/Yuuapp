@@ -1,18 +1,21 @@
 import React, { useState, useEffect } from 'react';
-import { Palette, Bell, Shield, Download, Trash2, Moon, Sun, Smartphone } from 'lucide-react';
+import { Palette, Bell, Shield, Download, Trash2, Globe, Smartphone } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
 import { useCycle } from '../contexts/CycleContext';
+import { useLanguage } from '../contexts/LanguageContext';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 import { Button } from './ui/button';
 import { Switch } from './ui/switch';
 import { Label } from './ui/label';
 import { Badge } from './ui/badge';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from './ui/alert-dialog';
 import { toast } from 'sonner';
 
 const Settings = () => {
   const { currentTheme, themes, switchTheme, colors, preferences, updateNotificationPreferences } = useTheme();
   const { cycles, symptoms, notes } = useCycle();
+  const { currentLanguage, switchLanguage, t } = useLanguage();
   const [notifications, setNotifications] = useState({
     periodReminders: true,
     ovulationReminders: true,
