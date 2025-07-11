@@ -1,5 +1,8 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { mockData } from '../services/mockData';
+import axios from 'axios';
+
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+const API = `${BACKEND_URL}/api`;
 
 const CycleContext = createContext();
 
@@ -16,83 +19,119 @@ export const CycleProvider = ({ children }) => {
   const [symptoms, setSymptoms] = useState([]);
   const [notes, setNotes] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
+  // Load data from API
   useEffect(() => {
-    // Load data from localStorage or use mock data
-    const savedCycles = localStorage.getItem('cycleTracker_cycles');
-    const savedSymptoms = localStorage.getItem('cycleTracker_symptoms');
-    const savedNotes = localStorage.getItem('cycleTracker_notes');
+    const loadData = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        
+        // Fetch all data concurrently
+        const [cyclesResponse, symptomsResponse, notesResponse] = await Promise.all([
+          axios.get(`${API}/cycles`),
+          axios.get(`${API}/symptoms`),
+          axios.get(`${API}/notes`)
+        ]);
 
-    if (savedCycles) {
-      setCycles(JSON.parse(savedCycles));
-    } else {
-      setCycles(mockData.cycles);
-    }
+        setCycles(cyclesResponse.data);
+        setSymptoms(symptomsResponse.data);
+        setNotes(notesResponse.data);
+      } catch (error) {
+        console.error('Error loading data:', error);
+        setError('Failed to load data');
+        
+        // Fallback to localStorage if API fails
+        const savedCycles = localStorage.getItem('cycleTracker_cycles');
+        const savedSymptoms = localStorage.getItem('cycleTracker_symptoms');
+        const savedNotes = localStorage.getItem('cycleTracker_notes');
 
-    if (savedSymptoms) {
-      setSymptoms(JSON.parse(savedSymptoms));
-    } else {
-      setSymptoms(mockData.symptoms);
-    }
+        if (savedCycles) setCycles(JSON.parse(savedCycles));
+        if (savedSymptoms) setSymptoms(JSON.parse(savedSymptoms));
+        if (savedNotes) setNotes(JSON.parse(savedNotes));
+      } finally {
+        setLoading(false);
+      }
+    };
 
-    if (savedNotes) {
-      setNotes(JSON.parse(savedNotes));
-    } else {
-      setNotes(mockData.notes);
-    }
-
-    setLoading(false);
+    loadData();
   }, []);
 
-  useEffect(() => {
-    if (!loading) {
-      localStorage.setItem('cycleTracker_cycles', JSON.stringify(cycles));
+  const addCycle = async (cycleData) => {
+    try {
+      const response = await axios.post(`${API}/cycles`, cycleData);
+      setCycles(prev => [response.data, ...prev]);
+      return response.data;
+    } catch (error) {
+      console.error('Error adding cycle:', error);
+      throw new Error('Failed to add cycle');
     }
-  }, [cycles, loading]);
-
-  useEffect(() => {
-    if (!loading) {
-      localStorage.setItem('cycleTracker_symptoms', JSON.stringify(symptoms));
-    }
-  }, [symptoms, loading]);
-
-  useEffect(() => {
-    if (!loading) {
-      localStorage.setItem('cycleTracker_notes', JSON.stringify(notes));
-    }
-  }, [notes, loading]);
-
-  const addCycle = (cycleData) => {
-    const newCycle = {
-      id: Date.now().toString(),
-      ...cycleData,
-      createdAt: new Date().toISOString()
-    };
-    setCycles(prev => [...prev, newCycle]);
   };
 
-  const updateCycle = (id, updates) => {
-    setCycles(prev => prev.map(cycle => 
-      cycle.id === id ? { ...cycle, ...updates } : cycle
-    ));
+  const updateCycle = async (id, updates) => {
+    try {
+      const response = await axios.put(`${API}/cycles/${id}`, updates);
+      setCycles(prev => prev.map(cycle => 
+        cycle.id === id ? response.data : cycle
+      ));
+      return response.data;
+    } catch (error) {
+      console.error('Error updating cycle:', error);
+      throw new Error('Failed to update cycle');
+    }
   };
 
-  const addSymptom = (symptomData) => {
-    const newSymptom = {
-      id: Date.now().toString(),
-      ...symptomData,
-      createdAt: new Date().toISOString()
-    };
-    setSymptoms(prev => [...prev, newSymptom]);
+  const deleteCycle = async (id) => {
+    try {
+      await axios.delete(`${API}/cycles/${id}`);
+      setCycles(prev => prev.filter(cycle => cycle.id !== id));
+    } catch (error) {
+      console.error('Error deleting cycle:', error);
+      throw new Error('Failed to delete cycle');
+    }
   };
 
-  const addNote = (noteData) => {
-    const newNote = {
-      id: Date.now().toString(),
-      ...noteData,
-      createdAt: new Date().toISOString()
-    };
-    setNotes(prev => [...prev, newNote]);
+  const addSymptom = async (symptomData) => {
+    try {
+      const response = await axios.post(`${API}/symptoms`, symptomData);
+      setSymptoms(prev => [response.data, ...prev]);
+      return response.data;
+    } catch (error) {
+      console.error('Error adding symptom:', error);
+      throw new Error('Failed to add symptom');
+    }
+  };
+
+  const deleteSymptom = async (id) => {
+    try {
+      await axios.delete(`${API}/symptoms/${id}`);
+      setSymptoms(prev => prev.filter(symptom => symptom.id !== id));
+    } catch (error) {
+      console.error('Error deleting symptom:', error);
+      throw new Error('Failed to delete symptom');
+    }
+  };
+
+  const addNote = async (noteData) => {
+    try {
+      const response = await axios.post(`${API}/notes`, noteData);
+      setNotes(prev => [response.data, ...prev]);
+      return response.data;
+    } catch (error) {
+      console.error('Error adding note:', error);
+      throw new Error('Failed to add note');
+    }
+  };
+
+  const deleteNote = async (id) => {
+    try {
+      await axios.delete(`${API}/notes/${id}`);
+      setNotes(prev => prev.filter(note => note.id !== id));
+    } catch (error) {
+      console.error('Error deleting note:', error);
+      throw new Error('Failed to delete note');
+    }
   };
 
   const getPredictions = () => {
@@ -129,10 +168,14 @@ export const CycleProvider = ({ children }) => {
     symptoms,
     notes,
     loading,
+    error,
     addCycle,
     updateCycle,
+    deleteCycle,
     addSymptom,
+    deleteSymptom,
     addNote,
+    deleteNote,
     getPredictions
   };
 
