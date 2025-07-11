@@ -129,7 +129,7 @@ const CycleLog = () => {
       }
     } catch (error) {
       console.error('Submit error:', error);
-      toast.error(error.message || 'Something went wrong. Please try again.');
+      toast.error(error.message || t('somethingWentWrong'));
     }
   };
 
