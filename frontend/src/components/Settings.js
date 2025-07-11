@@ -40,11 +40,20 @@ const Settings = () => {
     
     try {
       await updateNotificationPreferences(newNotifications);
-      toast.success('Notification settings updated');
+      toast.success(t('notificationSettingsUpdated'));
     } catch (error) {
       // Revert on error
       setNotifications(notifications);
       toast.error('Failed to update notification settings');
+    }
+  };
+
+  const handleLanguageChange = async (languageCode) => {
+    try {
+      await switchLanguage(languageCode);
+      toast.success('Language updated successfully');
+    } catch (error) {
+      toast.error('Failed to update language');
     }
   };
 
