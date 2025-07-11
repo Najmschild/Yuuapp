@@ -77,7 +77,7 @@ const Settings = () => {
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
     
-    toast.success('Data exported successfully');
+    toast.success(t('dataExportedSuccess'));
   };
 
   const clearAllData = () => {
@@ -85,7 +85,8 @@ const Settings = () => {
     localStorage.removeItem('cycleTracker_symptoms');
     localStorage.removeItem('cycleTracker_notes');
     localStorage.removeItem('cycleTracker_theme');
-    toast.success('All local data cleared. Please refresh the page.');
+    localStorage.removeItem('cycleTracker_language');
+    toast.success(t('allDataCleared'));
   };
 
   return (
@@ -93,26 +94,52 @@ const Settings = () => {
       {/* Header */}
       <div className="mb-6">
         <h1 className="text-3xl font-bold" style={{ color: colors.text }}>
-          Settings
+          {t('settingsTitle')}
         </h1>
         <p className="text-sm mt-1" style={{ color: colors.textSecondary }}>
-          Customize your cycle tracking experience
+          {t('customizeExperience')}
         </p>
       </div>
 
       <div className="space-y-6">
+        {/* Language Settings */}
+        <Card className="shadow-xl border-0" style={{ backgroundColor: colors.surface }}>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2" style={{ color: colors.text }}>
+              <Globe size={20} />
+              {t('language')}
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div>
+              <Label className="text-base font-medium" style={{ color: colors.text }}>
+                {t('selectLanguage')}
+              </Label>
+              <Select value={currentLanguage} onValueChange={handleLanguageChange}>
+                <SelectTrigger className="mt-2" style={{ borderColor: colors.accent }}>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="en">{t('english')}</SelectItem>
+                  <SelectItem value="fr">{t('french')}</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </CardContent>
+        </Card>
+
         {/* Theme Settings */}
         <Card className="shadow-xl border-0" style={{ backgroundColor: colors.surface }}>
           <CardHeader>
             <CardTitle className="flex items-center gap-2" style={{ color: colors.text }}>
               <Palette size={20} />
-              Theme & Appearance
+              {t('themeAppearance')}
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <div>
               <Label className="text-base font-medium" style={{ color: colors.text }}>
-                Choose Your Theme
+                {t('chooseTheme')}
               </Label>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-3">
                 {Object.entries(themes).map(([key, theme]) => (
@@ -129,11 +156,11 @@ const Settings = () => {
                   >
                     <div className="flex items-center justify-between mb-3">
                       <h3 className="font-semibold" style={{ color: theme.colors.text }}>
-                        {theme.name}
+                        {t(key === 'neutral' ? 'calmNeutrals' : key === 'earthy' ? 'earthyTones' : 'minimalMonochrome')}
                       </h3>
                       {currentTheme === key && (
                         <Badge style={{ backgroundColor: theme.colors.primary + '20', color: theme.colors.primary }}>
-                          Active
+                          {t('active')}
                         </Badge>
                       )}
                     </div>
@@ -172,17 +199,17 @@ const Settings = () => {
           <CardHeader>
             <CardTitle className="flex items-center gap-2" style={{ color: colors.text }}>
               <Bell size={20} />
-              Notifications
+              {t('notifications')}
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-6">
             <div className="flex items-center justify-between">
               <div>
                 <Label className="text-base font-medium" style={{ color: colors.text }}>
-                  Period Reminders
+                  {t('periodReminders')}
                 </Label>
                 <p className="text-sm" style={{ color: colors.textSecondary }}>
-                  Get notified 2 days before your predicted period
+                  {t('periodRemindersDesc')}
                 </p>
               </div>
               <Switch
@@ -194,10 +221,10 @@ const Settings = () => {
             <div className="flex items-center justify-between">
               <div>
                 <Label className="text-base font-medium" style={{ color: colors.text }}>
-                  Ovulation Reminders
+                  {t('ovulationReminders')}
                 </Label>
                 <p className="text-sm" style={{ color: colors.textSecondary }}>
-                  Get notified during your fertile window
+                  {t('ovulationRemindersDesc')}
                 </p>
               </div>
               <Switch
@@ -209,10 +236,10 @@ const Settings = () => {
             <div className="flex items-center justify-between">
               <div>
                 <Label className="text-base font-medium" style={{ color: colors.text }}>
-                  Fertile Window
+                  {t('fertileWindow')}
                 </Label>
                 <p className="text-sm" style={{ color: colors.textSecondary }}>
-                  Daily reminders during your fertile days
+                  {t('fertileWindowDesc')}
                 </p>
               </div>
               <Switch
@@ -224,10 +251,10 @@ const Settings = () => {
             <div className="flex items-center justify-between">
               <div>
                 <Label className="text-base font-medium" style={{ color: colors.text }}>
-                  Daily Check-ins
+                  {t('dailyCheck')}
                 </Label>
                 <p className="text-sm" style={{ color: colors.textSecondary }}>
-                  Gentle daily reminders to log symptoms
+                  {t('dailyCheckDesc')}
                 </p>
               </div>
               <Switch
@@ -243,21 +270,21 @@ const Settings = () => {
           <CardHeader>
             <CardTitle className="flex items-center gap-2" style={{ color: colors.text }}>
               <Shield size={20} />
-              Privacy & Data
+              {t('privacyData')}
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-6">
             <div>
               <Label className="text-base font-medium" style={{ color: colors.text }}>
-                Data Storage
+                {t('dataStorage')}
               </Label>
               <p className="text-sm mt-1" style={{ color: colors.textSecondary }}>
-                All your data is stored securely on your device. No cloud sync or external sharing.
+                {t('dataStorageDesc')}
               </p>
               <div className="mt-3 p-3 rounded-lg" style={{ backgroundColor: colors.background }}>
                 <div className="flex items-center justify-between">
                   <span className="text-sm" style={{ color: colors.text }}>
-                    Cycles tracked
+                    {t('cyclesTracked')}
                   </span>
                   <Badge variant="outline" style={{ borderColor: colors.accent, color: colors.text }}>
                     {cycles.length}
@@ -265,7 +292,7 @@ const Settings = () => {
                 </div>
                 <div className="flex items-center justify-between mt-2">
                   <span className="text-sm" style={{ color: colors.text }}>
-                    Symptom entries
+                    {t('symptomEntries')}
                   </span>
                   <Badge variant="outline" style={{ borderColor: colors.accent, color: colors.text }}>
                     {symptoms.length}
@@ -273,7 +300,7 @@ const Settings = () => {
                 </div>
                 <div className="flex items-center justify-between mt-2">
                   <span className="text-sm" style={{ color: colors.text }}>
-                    Notes written
+                    {t('notesWritten')}
                   </span>
                   <Badge variant="outline" style={{ borderColor: colors.accent, color: colors.text }}>
                     {notes.length}
@@ -292,7 +319,7 @@ const Settings = () => {
                 }}
               >
                 <Download size={20} className="mr-2" />
-                Export Data
+                {t('exportData')}
               </Button>
 
               <AlertDialog>
@@ -302,7 +329,7 @@ const Settings = () => {
                     className="flex-1 py-6 rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105"
                   >
                     <Trash2 size={20} className="mr-2" />
-                    Clear All Data
+                    {t('clearAllData')}
                   </Button>
                 </AlertDialogTrigger>
                 <AlertDialogContent>
@@ -330,14 +357,14 @@ const Settings = () => {
           <CardHeader>
             <CardTitle className="flex items-center gap-2" style={{ color: colors.text }}>
               <Smartphone size={20} />
-              About
+              {t('about')}
             </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-3">
               <div className="flex items-center justify-between">
                 <span className="text-sm" style={{ color: colors.text }}>
-                  Version
+                  {t('version')}
                 </span>
                 <Badge variant="outline" style={{ borderColor: colors.accent, color: colors.text }}>
                   1.0.0
@@ -345,26 +372,25 @@ const Settings = () => {
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-sm" style={{ color: colors.text }}>
-                  Platform
+                  {t('platform')}
                 </span>
                 <Badge variant="outline" style={{ borderColor: colors.accent, color: colors.text }}>
-                  Web App
+                  {t('webApp')}
                 </Badge>
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-sm" style={{ color: colors.text }}>
-                  Data Privacy
+                  {t('dataPrivacy')}
                 </span>
                 <Badge variant="outline" style={{ borderColor: colors.accent, color: colors.text }}>
-                  Local Storage
+                  {t('localStorage')}
                 </Badge>
               </div>
             </div>
             
             <div className="mt-6 p-4 rounded-lg" style={{ backgroundColor: colors.background }}>
               <p className="text-sm" style={{ color: colors.textSecondary }}>
-                This app is designed to be your personal, private menstrual health companion. 
-                All data remains on your device, giving you complete control over your health information.
+                {t('aboutDesc')}
               </p>
             </div>
           </CardContent>
@@ -372,6 +398,7 @@ const Settings = () => {
       </div>
     </div>
   );
+};
 };
 
 export default Settings;
