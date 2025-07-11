@@ -135,14 +135,17 @@ const CalendarView = () => {
 
   return (
     <div className="p-4 max-w-6xl mx-auto">
+      {/* Today Widget */}
+      <TodayWidget />
+      
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <div>
           <h1 className="text-3xl font-bold" style={{ color: colors.text }}>
-            Cycle Calendar
+            {t('cycleCalendar')}
           </h1>
           <p className="text-sm mt-1" style={{ color: colors.textSecondary }}>
-            Track your cycle, symptoms, and wellness
+            {t('trackCycleSubtitle')}
           </p>
         </div>
         <Button
@@ -162,14 +165,14 @@ const CalendarView = () => {
           <CardHeader>
             <CardTitle className="flex items-center gap-2" style={{ color: colors.text }}>
               <Heart size={20} />
-              Upcoming Predictions
+              {t('upcomingPredictions')}
             </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div className="text-center p-4 rounded-lg" style={{ backgroundColor: colors.background }}>
                 <div className="text-sm font-medium mb-1" style={{ color: colors.textSecondary }}>
-                  Next Period
+                  {t('nextPeriod')}
                 </div>
                 <div className="text-lg font-bold" style={{ color: colors.period }}>
                   {predictions.nextPeriod.toLocaleDateString('en-US', { 
@@ -180,7 +183,7 @@ const CalendarView = () => {
               </div>
               <div className="text-center p-4 rounded-lg" style={{ backgroundColor: colors.background }}>
                 <div className="text-sm font-medium mb-1" style={{ color: colors.textSecondary }}>
-                  Ovulation
+                  {t('ovulation')}
                 </div>
                 <div className="text-lg font-bold" style={{ color: colors.ovulation }}>
                   {predictions.ovulation.toLocaleDateString('en-US', { 
@@ -191,10 +194,10 @@ const CalendarView = () => {
               </div>
               <div className="text-center p-4 rounded-lg" style={{ backgroundColor: colors.background }}>
                 <div className="text-sm font-medium mb-1" style={{ color: colors.textSecondary }}>
-                  Avg Cycle
+                  {t('avgCycle')}
                 </div>
                 <div className="text-lg font-bold" style={{ color: colors.fertile }}>
-                  {predictions.avgCycleLength} days
+                  {predictions.avgCycleLength} {t('days')}
                 </div>
               </div>
             </div>
